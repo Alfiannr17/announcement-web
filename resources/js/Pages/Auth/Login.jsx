@@ -31,70 +31,75 @@ export default function Login({ status, canResetPassword }) {
                 </div>
             )}
 
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
+            <div className="max-w-md p-2  w-full mx-auto">
+                    <div className="text-center mb-8">
+                    <h1 className="text-3xl font-bold text-gray-900">Welcome back</h1>
+                    <p className="text-gray-500 mt-2">Sign in to manage official announcements.</p>
+                    </div>
 
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        isFocused={true}
-                        onChange={(e) => setData('email', e.target.value)}
-                    />
 
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
+                    {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                    <form onSubmit={submit} className="space-y-6 mb-2">
+                        <div>
+                            <TextInput
+                                id="email"
+                                type="email"
+                                name="email"
+                                value={data.email}
+                                placeholder="Email"
+                                className="w-full"
+                                autoComplete="username"
+                                isFocused={true}
+                                onChange={(e) => setData('email', e.target.value)}
+                            />
+                            <InputError message={errors.email} className="mt-2" />
+                        </div>
 
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                    />
+                        <div className="relative">
+                            <TextInput
+                                id="password"
+                                type="password"
+                                name="password"
+                                value={data.password}
+                                placeholder="Password"
+                                className="w-full"
+                                autoComplete="current-password"
+                                onChange={(e) => setData('password', e.target.value)}
+                            />
+                            
+                            <InputError message={errors.password} className="mt-2" />
+                        </div>
 
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
+                        <div className="flex items-center justify-between">
+                            <label className="flex items-center">
+                                <Checkbox
+                                    name="remember"
+                                    checked={data.remember}
+                                    className="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500"
+                                    onChange={(e) => setData('remember', e.target.checked)}
+                                />
+                                <span className="ms-2 text-sm  text-gray-500">Remember me?</span>
+                            </label>
 
-                <div className="mt-4 block">
-                    <label className="flex items-center">
-                        <Checkbox
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) =>
-                                setData('remember', e.target.checked)
-                            }
-                        />
-                        <span className="ms-2 text-sm text-gray-600">
-                            Remember me
-                        </span>
-                    </label>
-                </div>
+                            {canResetPassword && (
+                                <Link
+                                    href={route('password.request')}
+                                    className="text-sm font-semibold text-blue-600 hover:text-blue-500"
+                                >
+                                    Forgot Password?
+                                </Link>
+                            )}
+                        </div>
 
-                <div className="mt-4 flex items-center justify-end">
-                    {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        <PrimaryButton 
+                            className="w-full justify-center transition" 
+                            disabled={processing}
                         >
-                            Forgot your password?
-                        </Link>
-                    )}
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
-                    </PrimaryButton>
+                            Login
+                        </PrimaryButton>
+                    </form>
                 </div>
-            </form>
         </GuestLayout>
     );
 }

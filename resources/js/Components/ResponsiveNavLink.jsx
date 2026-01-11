@@ -11,7 +11,7 @@ export default function ResponsiveNavLink({
             {...props}
             className={`flex items-center space-x-2 px-3 py-2 gap-2 rounded-lg transition duration-150 ease-in-out ${
                 active
-                    ? 'bg-blue-600 text-white font-semibold shadow-md'
+                    ? 'bg-blue-600 text-white font-semibold'
                   : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
             } text-base font-medium transition duration-150 ease-in-out focus:outline-none ${className}`}
         >

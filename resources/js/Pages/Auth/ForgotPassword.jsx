@@ -1,8 +1,9 @@
 import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
+import SecondaryButton from '@/Components/SecondaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function ForgotPassword({ status }) {
     const { data, setData, post, processing, errors } = useForm({
@@ -20,9 +21,14 @@ export default function ForgotPassword({ status }) {
             <Head title="Forgot Password" />
 
             <div className="mb-4 text-sm text-gray-600">
-                Forgot your password? No problem. Just let us know your email
-                address and we will email you a password reset link that will
-                allow you to choose a new one.
+                <div className="text-center mb-8">
+                        <h1 className="text-2xl font-bold text-gray-900">Forgot your password?</h1>
+                        <p className="text-gray-500 mt-4">No problem. Just let us know your email
+                        address and we will email you a password reset link that will
+                        allow you to choose a new one.</p>
+                    </div>
+                
+                
             </div>
 
             {status && (
@@ -44,10 +50,17 @@ export default function ForgotPassword({ status }) {
 
                 <InputError message={errors.email} className="mt-2" />
 
-                <div className="mt-4 flex items-center justify-end">
-                    <PrimaryButton className="ms-4" disabled={processing}>
+                <div className="mt-4 w-full items-center ">
+                    <Link href='#' className="block" >
+                    <PrimaryButton className='w-full items-center'  disabled={processing}>
                         Email Password Reset Link
                     </PrimaryButton>
+                    </Link>
+                    <Link href={route('login')} className="block">
+                        <SecondaryButton className='w-full mt-1 text-gray-500 items-center'>
+                            Back to Login
+                        </SecondaryButton>
+                    </Link>
                 </div>
             </form>
         </GuestLayout>

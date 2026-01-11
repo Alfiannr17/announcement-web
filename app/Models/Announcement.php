@@ -8,13 +8,16 @@ class Announcement extends Model
 {
     protected $fillable = [
         'title',
+        'subject',
         'body',
         'sender',
-        'created_by',
+        'published_at', 
         'sent_at',
+        'created_by',
     ];
 
     protected $casts = [
+        'published_at' => 'datetime',
         'sent_at' => 'datetime',
     ];
 

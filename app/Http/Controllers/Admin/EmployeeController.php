@@ -13,12 +13,35 @@ class EmployeeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $employees = Employee::latest()->paginate(10);
+        $query = Employee::query();
+
+        if ($request->search) {
+            $query->where(function($q) use ($request) {
+                $q->where('name', 'like', "%{$request->search}%")
+                ->orWhere('email', 'like', "%{$request->search}%");
+            });
+        }
+
+        if ($request->division) {
+            $query->where('division', $request->division);
+        }
+
+        if ($request->position) {
+            $query->where('position', $request->position);
+        }
+
+        $employees = $query->latest()->paginate(10)->withQueryString();
+
+        $divisions = Employee::whereNotNull('division')->where('division', '!=', '')->distinct()->pluck('division');
+        $positions = Employee::whereNotNull('position')->where('position', '!=', '')->distinct()->pluck('position');
 
         return Inertia::render('Admin/Employees/Index', [
             'employees' => $employees,
+            'filters' => $request->only(['search', 'division', 'position']),
+            'divisions' => $divisions,
+            'positions' => $positions,
         ]);
     }
 
@@ -59,7 +82,7 @@ class EmployeeController extends Controller
 
         return redirect()
             ->route('admin.employees.index')
-            ->with('success', 'Karyawan berhasil ditambahkan.');
+            ->with('success', 'Employee deleted successfully.');
     }
 
     /**
@@ -115,7 +138,7 @@ class EmployeeController extends Controller
 
         return redirect()
             ->route('admin.employees.index')
-            ->with('success', 'Data karyawan berhasil diupdate.');
+            ->with('success', 'Employee updated successfully.');
     }
 
     public function destroy(Employee $employee)
@@ -128,6 +151,6 @@ class EmployeeController extends Controller
 
         return redirect()
             ->route('admin.employees.index')
-            ->with('success', 'Karyawan berhasil dihapus.');
+            ->with('success', 'Employee deleted successfully.');
     }
 }

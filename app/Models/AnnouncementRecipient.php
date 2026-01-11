@@ -12,6 +12,11 @@ class AnnouncementRecipient extends Model
         'email_snapshot',
         'status',
         'error_message',
+        'read_at',
+    ];
+
+    protected $casts = [
+    'read_at' => 'datetime',
     ];
 
     public function announcement()

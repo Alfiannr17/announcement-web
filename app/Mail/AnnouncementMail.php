@@ -5,39 +5,48 @@ namespace App\Mail;
 use App\Models\AnnouncementRecipient;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
 class AnnouncementMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public AnnouncementRecipient $recipient;
+    public $recipient;
 
     public function __construct(AnnouncementRecipient $recipient)
     {
         $this->recipient = $recipient;
     }
 
-    public function build()
+    public function envelope(): Envelope
     {
-        $announcement = $this->recipient->announcement()->with('attachments')->first();
-        $employee     = $this->recipient->employee;
+        return new Envelope(
+            subject: $this->recipient->announcement->subject ?? $this->recipient->announcement->title,
+        );
+    }
 
-        $mail = $this->subject($announcement->subject ?? $announcement->title)
-            ->view('emails.announcement', [
-                'announcement' => $announcement,
-                'employee'     => $employee,
-        
-            ]);
+    public function content(): Content
+    {
+        return new Content(
+            view: 'emails.announcement',
+            with: [
+                'announcement' => $this->recipient->announcement,
+                'employee'     => $this->recipient->employee,
+                'recipient'    => $this->recipient, 
+            ],
+        );
+    }
 
-        foreach ($announcement->attachments as $attachment) {
-            $mail->attachFromStorageDisk(
-                'public',
-                $attachment->file_path,
-                $attachment->original_name
-            );
+    public function attachments(): array
+    {
+        $attachments = [];
+
+        foreach ($this->recipient->announcement->attachments as $file) {
+             $attachments[] = storage_path('app/public/' . $file->file_path);
         }
 
-        return $mail;
+        return $attachments;
     }
 }

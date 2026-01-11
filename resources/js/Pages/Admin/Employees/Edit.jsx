@@ -4,6 +4,7 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import InputError from '@/Components/InputError';
 import TextInput from '@/Components/TextInput';
 import PrimaryButton from '@/Components/PrimaryButton';
+import SecondaryButton from '@/Components/SecondaryButton';
 
 export default function Edit({ employee }) {
   const { data, setData, post, processing, errors } = useForm({
@@ -23,26 +24,20 @@ export default function Edit({ employee }) {
   };
 
   return (
-    <AdminLayout title="Edit Karyawan">
-      <Head title="Edit Karyawan" />
+    <AdminLayout title="Edit Employee">
+      <Head title="Edit Employee" />
 
-      <div className="bg-white rounded-xl p-6 lg:p-6">
+      <div className="bg-white rounded-xl border p-6 lg:p-6">
         <div className="flex justify-between items-center pb-4 border-b mb-6">
-            <h1 className="text-2xl font-semibold text-gray-800">Edit Karyawan: {employee.name}</h1>
-            <Link
-                href={route('admin.employees.index')}
-                className="text-sm text-blue-600 hover:text-blue-800 transition flex items-center space-x-1"
-            >
-                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-                <span>Kembali</span>
-            </Link>
+            <h1 className="text-xl font-semibold text-gray-800">Edit Employee: {employee.name}</h1>
+            
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6 w-full">
           <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
          
             <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">Nama Lengkap</label>
+              <label className="block text-sm font-medium mb-1 text-gray-700">Full Name</label>
               <TextInput
                 type="text"
                 value={data.name}
@@ -64,7 +59,7 @@ export default function Edit({ employee }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">Divisi</label>
+              <label className="block text-sm font-medium mb-1 text-gray-700">Division</label>
               <TextInput
                 type="text"
                 value={data.division}
@@ -75,7 +70,7 @@ export default function Edit({ employee }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">Jabatan</label>
+              <label className="block text-sm font-medium mb-1 text-gray-700">Position</label>
               <TextInput
                 type="text"
                 value={data.position}
@@ -88,7 +83,7 @@ export default function Edit({ employee }) {
 
           <div>
             <label className="block text-sm font-medium mb-4 text-gray-700">
-              Foto Profil (opsional)
+              Profile Photo (optional)
             </label>
             {employee.photo_path && (
               <div className="mb-5 flex items-center space-x-4 ml-4">
@@ -97,7 +92,7 @@ export default function Edit({ employee }) {
                     alt={employee.name}
                     className="w-16 h-16 rounded-full object-cover ring-2 ring-blue-500 ring-offset-2"
                  />
-                 <span className='text-sm text-gray-500'>Foto saat ini</span>
+                 <span className='text-sm text-gray-500'>Current photo</span>
               </div>
             )}
             <input
@@ -109,14 +104,20 @@ export default function Edit({ employee }) {
             <InputError message={errors.photo} className="mt-2" />
           </div>
 
-          <div className="pt-4">
+          <div className="pt-2 flex gap-2">
             <PrimaryButton
               type="submit"
               disabled={processing}
              
             >
-              {processing ? 'Menyimpan...' : 'Update Karyawan'}
+              {processing ? 'Saving...' : 'Update Employee'}
             </PrimaryButton>
+
+            <SecondaryButton>
+              <Link  href={route('admin.employees.index')}>
+                          Cancel
+              </Link>
+            </SecondaryButton>
           </div>
         </form>
       </div>

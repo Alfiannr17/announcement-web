@@ -8,7 +8,7 @@ export default function RichTextEditor({ value, onChange }) {
         extensions: [
             StarterKit,
             Placeholder.configure({
-                placeholder: 'Tulis isi pengumuman di sini...',
+                placeholder: 'Write the announcement body here...',
             }),
         ],
         content: value,

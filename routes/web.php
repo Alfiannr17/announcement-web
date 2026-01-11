@@ -8,12 +8,17 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\AnnouncementController;
 use App\Http\Controllers\Admin\AnnouncementPreviewController;
+use App\Http\Controllers\EmailTrackingController;
 
 
 
 Route::get('/', function(){
     return redirect()->route('admin.dashboard');
 });
+
+Route::get('/email/track/{id}', EmailTrackingController::class)
+    ->name('email.track')
+    ->middleware('signed');
 
 Route::middleware(['auth', 'verified'])
 ->prefix('admin')
@@ -26,17 +31,15 @@ Route::middleware(['auth', 'verified'])
             'index', 'create', 'store', 'show'
         ]);
 
+    Route::get('/about', function () {
+    return Inertia::render('Admin/About');
+    })->name('about');    
+
     Route::post('/announcements/preview-email', AnnouncementPreviewController::class)
             ->name('announcements.preview');
-});
 
-////
-
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';

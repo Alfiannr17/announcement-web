@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Mail\AnnouncementMail;
 use App\Models\AnnouncementRecipient;
+use Illuminate\Bus\Batchable; 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Mail;
 
 class SendAnnouncementEmailJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $recipientId;
 
@@ -24,12 +25,15 @@ class SendAnnouncementEmailJob implements ShouldQueue
 
     public function handle(): void
     {
+        if ($this->batch()?->cancelled()) {
+            return;
+        }
+
         $recipient = AnnouncementRecipient::with(
             'announcement.attachments', 
             'announcement',
             'employee'
-            )
-            ->find($this->recipientId);
+        )->find($this->recipientId);
 
         if (! $recipient) {
             return;

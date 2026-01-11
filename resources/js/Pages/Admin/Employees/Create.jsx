@@ -4,6 +4,8 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import InputError from '@/Components/InputError';
 import TextInput from '@/Components/TextInput';
 import PrimaryButton from '@/Components/PrimaryButton';
+import { PlusCircleIcon, UserIcon } from '@heroicons/react/24/solid';
+import SecondaryButton from '@/Components/SecondaryButton';
 
 export default function Create() {
   const { data, setData, post, processing, errors } = useForm({
@@ -22,26 +24,23 @@ export default function Create() {
   };
 
   return (
-    <AdminLayout title="Tambah Karyawan">
-      <Head title="Tambah Karyawan" />
+    <AdminLayout title="Add Employee">
+      <Head title="Add Employee" />
 
-      <div className="bg-white rounded-xl p-6 lg:p-6">
+      <div className="bg-white rounded-xl border p-6 lg:p-6">
         <div className="flex justify-between items-center pb-4 border-b mb-6">
-            <h1 className="text-2xl font-semibold text-gray-800">Tambah Karyawan Baru</h1>
-            <Link
-                href={route('admin.employees.index')}
-                className="text-sm text-blue-600 hover:text-blue-800 transition flex items-center space-x-1"
-            >
-                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-                <span>Kembali</span>
-            </Link>
+          <div className="flex items-center">
+            <PlusCircleIcon className="w-6 h-6 text-gray-700 mr-3" />
+            <h1 className="text-xl font-semibold text-gray-800">Add Employee</h1>
+          </div>
+            
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6 w-full">
-    <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
 
         <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700">Nama Lengkap</label>
+            <label className="block text-sm font-medium mb-1 text-gray-700">Full Name</label>
             <TextInput
                 type="text"
                 value={data.name}
@@ -63,7 +62,7 @@ export default function Create() {
         </div>
 
         <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700">Divisi</label>
+            <label className="block text-sm font-medium mb-1 text-gray-700">Division</label>
             <TextInput
                 type="text"
                 value={data.division}
@@ -74,7 +73,7 @@ export default function Create() {
         </div>
 
         <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700">Jabatan</label>
+            <label className="block text-sm font-medium mb-1 text-gray-700">Position</label>
             <TextInput
                 type="text"
                 value={data.position}
@@ -88,7 +87,7 @@ export default function Create() {
 
           <div>
             <label className="block text-sm font-medium mb-4 text-gray-700">
-              Foto Profil (opsional)
+              Photo Profile (optional)
             </label>
             <input
               type="file"
@@ -100,13 +99,18 @@ export default function Create() {
             <InputError message={errors.photo} className="mt-2" />
           </div>
 
-          <div className="pt-4">
+          <div className="pt-2 flex gap-2">
             <PrimaryButton
               type="submit"
               disabled={processing}
             >
-              {processing ? 'Menyimpan...' : 'Simpan Karyawan'}
+              {processing ? 'Saving...' : 'Save'}
             </PrimaryButton>
+            <SecondaryButton>
+              <Link  href={route('admin.employees.index')}>
+              Cancel
+              </Link>
+              </SecondaryButton>
           </div>
         </form>
       </div>
